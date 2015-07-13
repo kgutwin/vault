@@ -22,6 +22,8 @@ import (
 	"github.com/hashicorp/vault/builtin/logical/postgresql"
 	"github.com/hashicorp/vault/builtin/logical/transit"
 
+	pluginBasic "github.com/hashicorp/vault/plugin/logical/basic"
+
 	"github.com/hashicorp/vault/audit"
 	tokenDisk "github.com/hashicorp/vault/builtin/token/disk"
 	"github.com/hashicorp/vault/command"
@@ -73,6 +75,7 @@ func Commands(metaPtr *command.Meta) map[string]cli.CommandFactory {
 					"pki":        pki.Factory,
 					"transit":    transit.Factory,
 					"mysql":      mysql.Factory,
+					"plugin-basic": pluginBasic.Factory,
 				},
 				ShutdownCh: makeShutdownCh(),
 			}, nil
