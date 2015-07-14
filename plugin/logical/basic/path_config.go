@@ -14,7 +14,7 @@ func pathConfig() *framework.Path {
 				Description: "Path to plugin server.",
 			},
 
-			"ca": &framework.FieldSchema{
+			"cacert": &framework.FieldSchema{
 				Type: framework.TypeString,
 				Description: "TLS CA certificate (PEM)",
 			},
@@ -41,6 +41,9 @@ func pathConfigWrite(
 	req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 	entry, err := logical.StorageEntryJSON("config", rootConfig{
 		Url: data.Get("url").(string),
+		CaCert: data.Get("cacert").(string),
+		Cert: data.Get("cert").(string),
+		Key: data.Get("key").(string),
 	})
 	if err != nil {
 		return nil, err
@@ -63,13 +66,23 @@ func pathConfigRead(
 		return nil, nil
 	}
 
+	var result rootConfig
+	if err := entry.DecodeJSON(&result); err != nil {
+		return nil, err
+	}
+	
 	return &logical.Response{
 		Data: map[string]interface{}{
-			"url": string(entry.Value),
+			"url": result.Url,
+			"cacert": result.CaCert,
+			"cert": result.Cert,
 		},
 	}, nil
 }
 
 type rootConfig struct {
 	Url string `json:"url"`
+	CaCert string `json:"cacert"`
+	Cert string `json:"cert"`
+	Key string `json:"key"`
 }
