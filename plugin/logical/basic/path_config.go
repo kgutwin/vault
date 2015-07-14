@@ -55,7 +55,7 @@ func pathConfigWrite(
 
 func pathConfigRead(
 	req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-	entry, err := req.Storage.Get("config/url")
+	entry, err := req.Storage.Get("config")
 	if err != nil {
 		return nil, err
 	}
