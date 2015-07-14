@@ -12,13 +12,13 @@ func pathPlugin() *framework.Path {
 		Pattern: "(?P<path>.*)",
 		Fields: map[string]*framework.FieldSchema{
 			"path": &framework.FieldSchema{
-				Type: framework.TypeString,
+				Type:        framework.TypeString,
 				Description: "Path",
 			},
 		},
-			
+
 		Callbacks: map[logical.Operation]framework.OperationFunc{
-			logical.ReadOperation: pathPluginRead,
+			logical.ReadOperation:  pathPluginRead,
 			logical.WriteOperation: pathPluginWrite,
 		},
 	}
