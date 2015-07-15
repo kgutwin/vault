@@ -2,7 +2,9 @@ package basic
 
 import (
 	"fmt"
-
+	"time"
+	"encoding/json"
+	
 	"github.com/hashicorp/vault/logical"
 	"github.com/hashicorp/vault/logical/framework"
 )
@@ -26,10 +28,30 @@ func pathPlugin() *framework.Path {
 
 func pathPluginRead(
 	req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-	return logical.ErrorResponse(fmt.Sprintf("Not yet implemented %s", data.Get("path"))), nil
+	message := []byte(`{ "foo": "bar", "baz":["a","b"] }`)
+
+	var retdata map[string]interface{}
+	if err := json.Unmarshal(message, &retdata); err != nil {
+		return nil, err
+	}
+	
+	return &logical.Response{
+		Secret: &logical.Secret{
+			LeaseOptions: logical.LeaseOptions{
+				Lease: 1 * time.Hour,
+				LeaseGracePeriod: 1 * time.Hour,
+				Renewable: false,
+			},
+			InternalData: map[string]interface{}{
+				"secret_type": "plugin_basic",
+			},
+		},
+		Data: retdata,
+	}, nil
 }
 
 func pathPluginWrite(
 	req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 	return logical.ErrorResponse(fmt.Sprintf("Not Yet Implemented %v", data.Raw)), nil
+
 }
