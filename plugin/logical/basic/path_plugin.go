@@ -40,7 +40,7 @@ func pathPluginRead(
 			LeaseOptions: logical.LeaseOptions{
 				Lease: 1 * time.Hour,
 				LeaseGracePeriod: 1 * time.Hour,
-				Renewable: false,
+				Renewable: true,
 			},
 			InternalData: map[string]interface{}{
 				"secret_type": "plugin_basic",
